@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 
 from db import db
-
+from bot.keyboards.main_menu import main_menu
 router = Router()
 
 
@@ -36,4 +36,7 @@ async def cmd_start(message: Message):
             "VPNPanel готова к работе."
         )
 
-    await message.answer(text)
+    await message.answer(
+    text,
+    reply_markup=main_menu
+)
