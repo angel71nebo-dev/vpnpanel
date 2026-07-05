@@ -41,7 +41,50 @@ class Database:
 
         self.conn.commit()
 
+    def get_user(self, telegram_id: int):
+        cur = self.conn.cursor()
+        cur.execute(
+            "SELECT * FROM users WHERE telegram_id = ?",
+            (telegram_id,)
+        )
+        return cur.fetchone()
 
+    def add_user(self, telegram_id: int, username: str):
+        cur = self.conn.cursor()
+
+        cur.execute(
+            """
+            INSERT INTO users (
+                telegram_id,
+                username,
+                created_at
+            )
+            VALUES (?, ?, datetime('now'))
+            """,
+            (
+                telegram_id,
+                username,
+            )
+        )
+
+        self.conn.commit()
+
+    def update_username(self, telegram_id: int, username: str):
+        cur = self.conn.cursor()
+
+        cur.execute(
+            """
+            UPDATE users
+            SET username = ?
+            WHERE telegram_id = ?
+            """,
+            (
+                username,
+                telegram_id,
+            )
+        )
+
+        self.conn.commit()
 if __name__ == "__main__":
     db = Database()
     print("Database created successfully.")

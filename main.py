@@ -3,7 +3,7 @@ import asyncio
 from aiogram import Bot, Dispatcher
 
 from config import BOT_TOKEN
-from database import Database
+from db import db
 from bot.handlers.start import router as start_router
 
 async def main():
@@ -13,7 +13,7 @@ async def main():
         )
 
     # Инициализация базы
-    Database()
+    
 
     bot = Bot(BOT_TOKEN)
     dp = Dispatcher()
