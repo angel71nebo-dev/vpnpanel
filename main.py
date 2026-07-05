@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher
 
 from config import BOT_TOKEN
 from database import Database
-
+from bot.handlers.start import router as start_router
 
 async def main():
     if not BOT_TOKEN:
@@ -17,7 +17,8 @@ async def main():
 
     bot = Bot(BOT_TOKEN)
     dp = Dispatcher()
-
+   
+    dp.include_router(start_router)
     print("===================================")
     print("VPNPanel v2")
     print("База данных подключена")
