@@ -38,7 +38,19 @@ class Database:
             active INTEGER DEFAULT 1
         )
         """)
-
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS vpn_clients (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            telegram_id INTEGER,
+            client_name TEXT,
+            vpn_ip TEXT UNIQUE,
+            private_key TEXT,
+            public_key TEXT,
+            server TEXT,
+            created_at TEXT,
+            status TEXT DEFAULT 'active'
+        )
+        """)
         self.conn.commit()
 
     def get_user(self, telegram_id: int):
@@ -85,6 +97,59 @@ class Database:
         )
 
         self.conn.commit()
+    def add_vpn_client(
+        self,
+        telegram_id: int,
+        client_name: str,
+        vpn_ip: str,
+        private_key: str,
+        public_key: str,
+        server: str,
+    ):
+        cur = self.conn.cursor()
+
+        cur.execute(
+            """
+            INSERT INTO vpn_clients (
+                telegram_id,
+                client_name,
+                vpn_ip,
+                private_key,
+                public_key,
+                server,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+            """,
+            (
+                telegram_id,
+                client_name,
+                vpn_ip,
+                private_key,
+                public_key,
+                server,
+            )
+        )
+
+        self.conn.commit()
+
+
+    def get_vpn_clients(self, telegram_id: int):
+        cur = self.conn.cursor()
+
+        cur.execute(
+            """
+            SELECT *
+            FROM vpn_clients
+            WHERE telegram_id = ?
+            ORDER BY id
+            """,
+            (telegram_id,)
+        )
+
+        return cur.fetchall()
+
+
 if __name__ == "__main__":
     db = Database()
     print("Database created successfully.")

@@ -6,3 +6,6 @@ __pycache__/
 database/*.db
 logs/
 backups/
+vpn.db
+test_client.py
+test_wg.py
